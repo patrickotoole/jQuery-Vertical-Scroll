@@ -134,6 +134,7 @@
 		* Creates endcap objects for scrollbar, handles clicks, populates default content
 		* Parameters:
 		*	end_caps - height of end caps
+		*	scrollStep - size of scrollbar movement
 		* 	id - id of parent DOM object
 		*/
 		function GenerateScrollEndcaps(end_caps,scrollStep,id) {
@@ -152,7 +153,9 @@
 		/**
 		* Function: GenerateMouseScrollControl
 		* Creates controls to handle mousewheel scrolling
-		* Parameters: id - id of parent DOM object
+		* Parameters: 
+		*	scrollStep - size of scrollbar movement
+		*	id - id of parent DOM object
 		*/
 		function GenerateMouseScrollControl(scrollStep,id) {
 			$("#"+id).mousewheel(function(event, amount){
@@ -176,7 +179,7 @@
 		*/
 		function GenerateTouchScrollControl(id) {
 			$("#"+id).live('touchstart',function(start_event) {
-
+				start_event.preventDefault();
 				var original = this;
 				var e = start_event.originalEvent;
 				
