@@ -2,29 +2,39 @@
 
 ----
 
-This is a plugin written for jQuery which adds a vertical scrollbar to DOM object using jQuery UI. Detects object height/ necessary height to display contents and determines if a scrollbar is necessary. Rewraps content and creates a scrollbar inside existing object. 
+This is a plugin written for jQuery which adds a vertical scrollbar to DOM object using the jQuery UI slider. Detects object height/ necessary height to display contents and determines if a scrollbar is necessary. Rewraps content and creates a scrollbar inside existing object. 
 
-#### User has three controls over scroll of object:
-* scrollbar (clicks) 
-* mousewheel 
-* touch controls (iOS).
+#### User has four methods to control scroll of object:
+* click
+* drag
+* wheel (mouse)
+* touch (iOS)
+
+The functionality for each of these controls is stubbed out as secondary functions to allow for custom handling, scrolling and animation of events. The increment function is also stubbed for the same purpose. Default functionality and handling of all events is included.
 
 Usage
 ----
-*	$('.element').addScrollbar();
-*	$('.element').addScrollbar(scrollbar_options);
+*	$('.element').scrollbar();
+*	$('.element').scrollbar(method, scrollbar_options);
+
+### Methods
+* Create -- creates the scrollbar with specified options
+	$('.element').scrollbar("create", options_hash);	
+* Destroy -- removes scrollbar
+	$('.element').scrollbar("destroy");
+* Refresh -- removes scrollbar and creates scrollbar using original options
+	$('.element').scrollbar("refresh");
+* Increment -- external functionality to increment scrollbar
+	$('.element').scrollbar("increment", step);
 
 ### Options
-_scrollbar_options_ -- passed as object to addScrollbar. Default options shown below:
 
-location : "left",
-width: 10,
-margin: 2,
-background_color : "black",
-color : "grey",
-end_cap_size : 20,
-incrementSize : undefined,//25
-horizontalVisible : true
+* location: left or right,
+* width: int,
+* margin: int,
+* end_cap_size : int,
+* incrementSize : int,
+* horizontalVisible : bool
 
 Dependencies
 ---
@@ -34,6 +44,5 @@ Dependencies
 
 To Do / In Progress
 -----
-* Need to handle event propagation when touch occurs (currently click occurs on children when touch occurs)
 * Test suite / test page for various situations in process
-* Separation of remove functionality (addition of sub-methods to scrollbar functionality. ie, create, destroy, refresh)
+
