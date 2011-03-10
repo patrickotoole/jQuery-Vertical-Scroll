@@ -31,7 +31,8 @@
 				jQuery(content).remove();
 				this.contentHeight = height;
 				return height;
-			}
+			},
+			originalStyle : {}
 		}
 		var handlers = {
 			init : function (scrollStep,id) {
@@ -121,8 +122,8 @@
 			},
 			increment : function (step) {
 				return this.each(function() {
-					var $this = jQuery(this)
-					var id = $this.attr("id")
+					var $this = jQuery(this);
+					var id = $this.attr("id");
 					scrollDifference = $this.children(".scroll_content_wrapper").children(".scroll_content").height() - $this.height();
 					$.fn.scrollbar.incrementSlider(step,id,scrollDifference);
 				});
@@ -142,7 +143,7 @@
 		function CreateSlider(id) {
 			var margin_l = (options.scrollbar.location == "left") ? 0 : options.scrollbar.margin;
 			var margin_r = (options.scrollbar.location == "right") ? 0 : options.scrollbar.margin;
-			var scrollDifference = (function(opt) {return opt.scrollDifference;})(options)
+			var scrollDifference = (function(opt) {return opt.scrollDifference;})(options);
 			
 			// Create Scroll wrapper and slider
 			var scroll_wrap = jQuery('<div></div>').css({"margin-right": margin_r,"margin-left": margin_l,"position": "relative","float": options.scrollbar.location}).attr('class','scrollbar_outer');
@@ -170,7 +171,7 @@
 		function WrapContent(current_content) {
 			
 			var s_content = jQuery(current_content).clone(true,true);
-			options.originalStyle = $.parseJSON("{\""+jQuery(current_content).attr("style").replace(/\s/g,"").replace(/;$/,"").replace(/;/g,"\",\"").replace(/:/g,"\":\"")+"\"}");
+			jQuery(current_content).attr("style") ? options.originalStyle = $.parseJSON("{\""+jQuery(current_content).attr("style").replace(/\s/g,"").replace(/;$/,"").replace(/;/g,"\",\"").replace(/:/g,"\":\"")+"\"}") : null;
 			s_content.css({"height":"auto",'width':jQuery(current_content).outerWidth() - options.scrollbar.width - options.scrollbar.margin});
 			jQuery(s_content).css({"position":"absolute","left":0,"top":0}).attr("class","scroll_content").removeAttr("id");
 			
