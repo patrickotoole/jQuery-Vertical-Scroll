@@ -1,23 +1,23 @@
+/**
+* Title: jQuery UI Vertical Scrollbar
+* Adds a vertical scrollbar to DOM object using jQuery UI
+* 
+* Usage:
+*	$('.element').scrollbar();
+*	$('.element').scrollbar("destroy");
+*	$('.element').scrollbar("refresh");
+*	$('.element').scrollbar("create",{location:"right"});
+* 
+* Dependencies: jquery.ui, jquery.mousewheel
+* License:
+* 	Copyright (c) 2011 Patrick O'Toole
+*	Licensed Under the MIT/X-11 License 
+* 	www.rickotoole.com
+*
+* Version: 0.0.1d
+**/
+
 (function($) {
-	/**
-	* Title: jQuery UI Vertical Scrollbar
-	* Adds a vertical scrollbar to DOM object using jQuery UI
-	* 
-	* Usage:
-	*	$('.element').scrollbar();
-	*	$('.element').scrollbar("destroy");
-	*	$('.element').scrollbar("refresh");
-	*	$('.element').scrollbar("create",{location:"right"});
-	* 
-	* Dependencies: jquery.ui, jquery.mousewheel
-	* License:
-	* 	Copyright (c) 2011 Patrick O'Toole
-	*	Licensed Under the MIT/X-11 License 
-	* 	www.rickotoole.com
-	*
-	* Version: 0.0.1c 
-	**/	
-	
 	var options;
 	$.fn.scrollbar = function(method,user_options) {
 		options = {
@@ -64,7 +64,8 @@
 			*/
 			mousewheel : function (scrollStep,id) {
 				var scrollDifference = (function (opt) {return opt.scrollDifference})(options);
-				$.fn.scrollbar.wheel(id,scrollStep,scrollDifference);
+				var step = scrollStep > 10 ? scrollStep/10 : 1;
+				$.fn.scrollbar.wheel(id,step,scrollDifference);
 			},
 			/**
 			* Function: handlers.touch
@@ -172,7 +173,7 @@
 			
 			var s_content = jQuery(current_content).clone(true,true);
 			jQuery(current_content).attr("style") ? options.originalStyle = $.parseJSON("{\""+jQuery(current_content).attr("style").replace(/\s/g,"").replace(/;$/,"").replace(/;/g,"\",\"").replace(/:/g,"\":\"")+"\"}") : null;
-			s_content.css({"height":"auto",'width':jQuery(current_content).outerWidth() - options.scrollbar.width - options.scrollbar.margin});
+			s_content.css({"height":"auto",'width':jQuery(current_content).width() - options.scrollbar.width - options.scrollbar.margin});
 			jQuery(s_content).css({"position":"absolute","left":0,"top":0}).attr("class","scroll_content").removeAttr("id");
 			
 			options.setContentHeight(s_content,current_content);
@@ -218,7 +219,7 @@
 			
 			// Declare vars, set dimensions
 			var end_caps = options.scrollbar.end_cap_size;
-			var handle_h = (1-((options.contentHeight-h)/options.contentHeight))*h - end_caps*2;
+			var handle_h = parseInt(((1-((options.contentHeight-h)/options.contentHeight))*h - end_caps*2)/2)*2;
 			handle_h = (handle_h > options.scrollbar.end_cap_size*2) ? handle_h : options.scrollbar.end_cap_size*2;
 			
 			var sliderHeight = h - handle_h - end_caps*2;
@@ -249,7 +250,7 @@
 			}
 			else
 			{
-				scroll_outer.css('margin-top',1);
+
 			}
 		}
 		
@@ -332,8 +333,11 @@
 				
 				if (((slider_value == 0 ) && (amount > 0)) || ((slider_value == 100 ) && (amount < 0)) ||((slider_value > 0 ) && (slider_value < 100 )))
 				{
-					var multiplier = 0;
-					$.fn.scrollbar.incrementSlider(amount*scrollStep,id,scrollDifference);
+					var multiplier = 15;
+					var step = amount*multiplier;
+					step = Math.abs(step) > 1 ? parseInt(step) : parseInt(Math.abs(step)/step);
+					$.fn.scrollbar.incrementSlider(step,id,scrollDifference);
+
 					event.preventDefault();
 					return false;
 				}

@@ -13,21 +13,34 @@
 
 <script>
 	$(document).ready( function () {
+		$(".slider").slider();
 		$(".outer").scrollbar({incrementSize:3});
 		
 		$(".demo_1").scrollbar({end_cap_size:10});
 		$(".demo_1 .scroll_up").css('borderTopLeftRadius',5).html("");
 		$(".demo_1 .scroll_down").css('borderBottomLeftRadius',5).html("");
+		$(".demo_1").css({'border': '1px solid #EEE','borderRadius':5})
 		
+
 		$(".demo_2").scrollbar({width:18,location:"right",incrementSize:2});
 		$(".demo_2 .scroll_up").css({'borderTopLeftRadius':9,'borderTopRightRadius':9});
 		$(".demo_2 .scroll_down").css({'borderBottomLeftRadius':9,'borderBottomRightRadius':9});
-		$(".demo_2 .scroll_down").css({'borderBottomLeftRadius':9,'borderBottomRightRadius':9});
-		$(".demo_2 .ui-slider-handle").css({'borderRadius':'9px','background':'grey','border-color':'grey'});
-		
-		
+		$(".demo_2 .ui-slider-handle").css({'borderRadius':'9px','background':'#949494','border-color':'#949494'});
+
+		// changing interior property needs to change exterior property
+		$(".demo_2 .scroll_content").css({'border': '1px solid #EEE','borderRadius':5});
+		$(".demo_2").css("width",$(".demo_2").width()+2);
+		$(".demo_2 .scroll_content_wrapper").css("width",$(".demo_2 .scroll_content_wrapper").width()+2);
+		$(".demo_2").css("height",$(".demo_2").height()+2);
+		$(".demo_2 .scroll_content_wrapper").css("height",$(".demo_2 .scroll_content_wrapper").height()+2);
+
+		// the better way 
+		$(".demo_3").css({'border': '1px solid #EEE','borderRadius':5,padding:10});
 		$(".demo_3").scrollbar({end_cap_size:0,incrementSize:2});
-		jQuery(".up_arrow").css()
+		$(".demo_3").css({'border': 'none','borderRadius':0});
+		$(".demo_3 .scroll_top").css({'borderTopLeftRadius':4,'borderTopRightRadius':4});
+		$(".demo_3 .scroll_bottom").css({'borderBottomRightRadius':4,'borderBottomLeftRadius':4})
+		
 		$(".demo_4").scrollbar({width:15,location:"right"});
 
 	});
@@ -43,6 +56,7 @@
 	<div style="width:100%">
 		<span style="text-decoration:line-through">World's ugliest newspaper</span>
 		Demo for scroll bars with nesting.
+		<div class="slider" style="width:600px"></div>
 		<hr /></div>
 <div class="outer" style="width:1200px;height:500px;overflow-y:auto;display:inline-block;position:relative">
 
@@ -57,7 +71,7 @@
 			Nunc volutpat, ligula vel vestibulum facilisis, sapien nibh mollis est, et mollis sapien ante a elit. Vivamus lacus risus, congue eu eleifend sed, faucibus sed ligula. Suspendisse egestas aliquet neque, non mattis orci vehicula ut. Mauris gravida malesuada dui sit amet convallis. Nulla eu ipsum sodales mi molestie posuere id vitae urna. Pellentesque velit velit, condimentum vel dignissim a, suscipit ut mauris. Praesent rutrum, diam ac interdum lacinia, dolor nisl iaculis odio, eu interdum felis erat bibendum dui. Cras varius adipiscing laoreet. Donec a purus sollicitudin lectus dapibus fringilla. Suspendisse dictum purus at nisl ullamcorper tempor. Proin malesuada nisi quis tellus mollis eget malesuada justo blandit. Donec in tortor turpis, ac sagittis ipsum. Pellentesque sit amet odio orci, at blandit augue.
 		</div>
 	</div>
-	<div class="demo_1" style="width:300px;height:300px;overflow-y:auto;display:inline-block;vertical-align:top">
+	<div class="demo_1" style="width:300px;height:301px;overflow-y:auto;display:inline-block;vertical-align:top;">
 		<h2>Demo 1</h2>
 		<ul>
 			<li>end_cap_size</li>
