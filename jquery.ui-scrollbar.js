@@ -14,7 +14,7 @@
 *	Licensed Under the MIT/X-11 License 
 * 	www.rickotoole.com
 *
-* Version: 0.0.1d
+* Version: 0.0.1e
 **/
 
 (function($) {
@@ -95,9 +95,12 @@
 					{		
 						// Create div with current objects dimensions, styling
 						var scroll_slider = CreateSlider(id);
-						var new_c = jQuery("<div></div>").attr("class",cl).attr("id",id).
-							css(options.originalStyle).
-							css({'position':'relative','overflow-y':'hidden','width':w,'height':h});
+						var new_c = jQuery("<div></div>").attr("class",cl).attr("id",id);
+							
+						//new_c.css(options.originalStyle);
+						(options.originalStyle != undefined) ? new_c.css(options.originalStyle) : null;
+						new_c.css({'position':'relative','overflow-y':'hidden','width':w,'height':h});
+
 
 						new_c.append(scroll_slider);
 						new_c.append(scrollContentWrapper);
@@ -172,7 +175,7 @@
 		function WrapContent(current_content) {
 			
 			var s_content = jQuery(current_content).clone(true,true);
-			jQuery(current_content).attr("style") ? options.originalStyle = $.parseJSON("{\""+jQuery(current_content).attr("style").replace(/\s/g,"").replace(/;$/,"").replace(/;/g,"\",\"").replace(/:/g,"\":\"")+"\"}") : null;
+			options.originalStyle = jQuery(current_content).attr("style") ? $.parseJSON("{\""+jQuery(current_content).attr("style").replace(/\s/g,"").replace(/;$/,"").replace(/;/g,"\",\"").replace(/:/g,"\":\"")+"\"}") : {};
 			s_content.css({"height":"auto",'width':jQuery(current_content).width() - options.scrollbar.width - options.scrollbar.margin});
 			jQuery(s_content).css({"position":"absolute","left":0,"top":0}).attr("class","scroll_content").removeAttr("id");
 			
@@ -243,10 +246,22 @@
 			if (end_caps > 0)
 			{
 				var arrow = jQuery('<div style="height:' + end_caps +'px;padding:0px;border:0px;"></div>').attr('class','ui-widget-content');
+				var icon_w = 16;	// note: .width() property changed from 1.4.2 to 1.5.1; no longer needs to be rendered
+				var arrow_icon = jQuery('<div></div>').addClass('ui-icon').width(icon_w);
+				
 				scroll_outer.prepend(arrow.clone(true).addClass('scroll_up'));
 				scroll_outer.append(arrow.clone(true).addClass('scroll_down'));
-				scroll_outer.children('.scroll_up').html('&uarr;').css({"text-align":"center","cursor":"default"});
-				scroll_outer.children('.scroll_down').html('&darr;').css({"text-align":"center","cursor":"default"});
+
+				var w = (icon_w-scroll_outer.width())/2;
+				w = (parseInt(w) == w) ? w : w - 0.5*w/Math.abs(w);
+				scroll_outer.children(".scroll_up").css({"cursor":"default"}).html(arrow_icon.clone().
+					css({'position':'absolute','left':-w,'overflow':'hidden','width':'15px','max-height':"16px"}).addClass('ui-icon-carat-1-n'));
+
+				w ++;
+				scroll_outer.children('.scroll_down').css({"cursor":"default"});				
+				scroll_outer.children(".scroll_down").html(arrow_icon.clone().
+					css({'position':'absolute','left':-w,'overflow':'hidden','width':'15px','max-height':"16px"}).addClass('ui-icon-carat-1-s'));
+
 			}
 			else
 			{
@@ -275,7 +290,7 @@
 	
 	$.fn.scrollbar.defaults = {
 		location : "left",
-		width: 10,
+		width: 9,
 		margin: 2,
 		end_cap_size : 20,
 		incrementSize : undefined,
@@ -334,8 +349,7 @@
 				if (((slider_value == 0 ) && (amount > 0)) || ((slider_value == 100 ) && (amount < 0)) ||((slider_value > 0 ) && (slider_value < 100 )))
 				{
 					var multiplier = 15;
-					var step = amount*multiplier;
-					step = Math.abs(step) > 1 ? parseInt(step) : parseInt(Math.abs(step)/step);
+					var step = (parseInt(amount) == amount) ? amount : amount/0.025;
 					$.fn.scrollbar.incrementSlider(step,id,scrollDifference);
 
 					event.preventDefault();

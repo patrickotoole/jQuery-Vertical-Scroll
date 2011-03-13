@@ -14,7 +14,7 @@
 <script>
 	$(document).ready( function () {
 		$(".slider").slider();
-		$(".outer").scrollbar({incrementSize:3});
+		$(".outer").scrollbar({incrementSize:3,width:10});
 		
 		$(".demo_1").scrollbar({end_cap_size:10});
 		$(".demo_1 .scroll_up").css('borderTopLeftRadius',5).html("");
@@ -22,7 +22,7 @@
 		$(".demo_1").css({'border': '1px solid #EEE','borderRadius':5})
 		
 
-		$(".demo_2").scrollbar({width:18,location:"right",incrementSize:2});
+		$(".demo_2").scrollbar({width:36,location:"right",incrementSize:2});
 		$(".demo_2 .scroll_up").css({'borderTopLeftRadius':9,'borderTopRightRadius':9});
 		$(".demo_2 .scroll_down").css({'borderBottomLeftRadius':9,'borderBottomRightRadius':9});
 		$(".demo_2 .ui-slider-handle").css({'borderRadius':'9px','background':'#949494','border-color':'#949494'});
@@ -42,7 +42,17 @@
 		$(".demo_3 .scroll_bottom").css({'borderBottomRightRadius':4,'borderBottomLeftRadius':4})
 		
 		$(".demo_4").scrollbar({width:15,location:"right"});
-
+		
+		
+/*		.each( function() {
+			var $this = jQuery(this);
+			var w = (16 - $this.width())/2;
+			var pos_arr = $this.css('background-position').replace(/px/g,"").split(/\s/);
+			pos_arr[0] = parseInt(pos_arr[0])-w;
+			$this.css('background-position',pos_arr[0]+ "px " + pos_arr[1]+ "px");
+			console.log($this,w);
+		});
+*/
 	});
 	
 </script>
