@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	
-	
         <meta charset="utf-8" />
         <title>demo</title>
 <link href="jquery-ui-1.8.10.custom.css" rel="stylesheet" type="text/css">
@@ -45,9 +43,20 @@
 		
 		$(".demo_4").scrollbar({width:15,location:"right"});
 		
+		
+/*		.each( function() {
+			var $this = jQuery(this);
+			var w = (16 - $this.width())/2;
+			var pos_arr = $this.css('background-position').replace(/px/g,"").split(/\s/);
+			pos_arr[0] = parseInt(pos_arr[0])-w;
+			$this.css('background-position',pos_arr[0]+ "px " + pos_arr[1]+ "px");
+			console.log($this,w);
+		});
+*/
 	});
 	
 </script>
+
         <!--[if IE]>
                 <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
         <![endif]-->
