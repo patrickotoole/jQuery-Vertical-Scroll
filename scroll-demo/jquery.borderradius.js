@@ -14,7 +14,7 @@
 
 	var div = document.createElement("div"),
 	divStyle = div.style,
-	rWhiteSpace = /\s/;
+	rWhiteSpace = /\s/,
 	dirs = "TopLeft TopRight BottomRight BottomLeft".split(rWhiteSpace);
 
 	$.support.borderRadius =

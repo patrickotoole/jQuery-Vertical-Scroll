@@ -3,7 +3,7 @@
 * Adds a vertical scrollbar to DOM object using jQuery UI
 * 
 * Usage:
-*	$('.element').scrollbar();
+*	$('.elemeinlineStyleForWrappernt').scrollbar();
 *	$('.element').scrollbar("destroy");
 *	$('.element').scrollbar("refresh");
 *	$('.element').scrollbar("create",{location:"right"});
@@ -14,13 +14,13 @@
 *	Licensed Under the MIT/X-11 License 
 * 	www.rickotoole.com
 *
-* Version: 0.0.1h
+* Version: 0.0.1i
 **/
 
 (function($) {
-	var options;
+	
 	$.fn.scrollbar = function(method,user_options) {
-		options = {
+		var options = {
 			scrollbar : $.extend({},user_options,$.fn.scrollbar.defaults),
 			scrollDifference : 0,
 			setContentHeight : function(content,place_after_object) {
@@ -85,30 +85,34 @@
 						w = c.outerWidth(),
 						h = c.outerHeight(),
 						cl = c.attr("class"),
-						id = c.attr("id") || (jQuery("scrollable_content_" + index).length > 0) ? "scrollable_content_" + index : "scrollable_content_" + cl;
+						id = c.attr("id") || "scrollable_content_" + cl +"_"+ index;
 
-					var scrollContentWrapper = WrapContent(this);
-					options.scrollDifference = options.contentHeight - h;
-
-
+					options.wrapperHeight 		= h;
+					options.wrapperWidth 		= w;
+					var scrollContentWrapper 	= WrapContent(this);
+					
 					if (options.scrollDifference > 0)
 					{		
 						// Create div with current objects dimensions, styling
 						var scroll_slider = CreateSlider(id);
 						var new_c = jQuery("<div></div>").attr("class",cl).attr("id",id);
-							
-						(options.originalStyle != undefined) ? new_c.attr("style",options.originalStyle) : null;
+						
+						// Use inline style on wrapper?
+						!options.scrollbar.inlineStyleForWrapper ? null : (options.originalStyle != undefined) ? new_c.attr("style",options.originalStyle) : null;
 						new_c.css({'position':'relative','overflow-y':'hidden','width':w,'height':h});
 
-						new_c.append(scroll_slider);
-						new_c.append(scrollContentWrapper);
+						// Insert newly wrapped content and remove old content
+						new_c.append(scroll_slider).append(scrollContentWrapper);
 						c.after(new_c);			
 						c.remove();
-						
 
+						// Format slider
 						SliderToScrollbar(id,h);
 						GenerateScrollControls(id);
+						
+						// Save options and trigger completion event
 						new_c.data("scroll-options",options);
+						jQuery(this).trigger('scroll_drawn');
 					}
 					else 
 					{
@@ -174,19 +178,20 @@
 			
 			var s_content = jQuery(current_content).clone(true,true);
 			options.originalStyle = jQuery(current_content).attr("style") ? jQuery(current_content).attr("style") : "";
-// Due to awfulness of ie, not storing as an object
 //				jQuery(current_content).attr("style") ? $.parseJSON("{\""+jQuery(current_content).attr("style").replace(/\s/g,"").replace(/;$/,"").replace(/;/g,"\",\"").replace(/:/g,"\":\"")+"\"}") : {};
 			
 			s_content.css({"height":"auto",'width':jQuery(current_content).width() - options.scrollbar.width - options.scrollbar.margin});
 			jQuery(s_content).css({"position":"absolute","left":0,"top":0}).attr("class","scroll_content").removeAttr("id");
 			
 			options.setContentHeight(s_content,current_content);
-			
+			options.scrollDifference = options.contentHeight - options.wrapperHeight;
+			s_content.css({"height":options.contentHeight});
+
 			var sc_wrap = jQuery('<div></div>').css({
 				"position"	: "relative",
 				"float"		: "left",
-				'width'		: jQuery(current_content).outerWidth() - options.scrollbar.width - options.scrollbar.margin,
-				'height'	: options.contentHeight,
+				'width'		: options.wrapperWidth - options.scrollbar.width - options.scrollbar.margin,
+				'height'	: options.wrapperHeight,
 				"overflow-y": "hidden"
 			}).addClass('scroll_content_wrapper');
 			
@@ -296,12 +301,14 @@
 		margin: 2,
 		end_cap_size : 16,
 		incrementSize : undefined,
-		horizontalVisible : true
+		horizontalVisible : true,
+		inlineStyleForWrapper : true
 	};
 	
 	/**
 	* Function: $.fn.scrollbar.incrementSlider
-	* Moves slider and corresponding content by specified amount
+	* Moves slider and corresponding content by specified amount. Made an external function to
+	* allow for animation, easing, etc to be added to the movement.
 	* Parameters: 
 	*	step - increment size
 	*	id  - id of wrapping object
@@ -344,7 +351,7 @@
 		}
 	};
 	$.fn.scrollbar.wheel = function (id,scrollStep,scrollDifference) {
-		if (!jQuery.isFunction(jQuery.fn.mousewheel)) {
+		if (jQuery.isFunction(jQuery.fn.mousewheel)) {
 			$("#"+id).mousewheel(function(event, totalDelta,deltaX,deltaY){
 				return $.fn.scrollbar.wheel.increment(id,scrollDifference,deltaY);
 			});
@@ -366,10 +373,8 @@
 
 		function mini_handler(event)
 		{
-			var orgEvent = event || window.event;
-			var deltaY
+			var orgEvent = event || window.event, deltaY;
 			event = $.event.fix(orgEvent);
-			event.type = "mousewheel";
 			
 			deltaY = 
 				orgEvent.wheelDeltaY !== undefined ? orgEvent.wheelDeltaY/120 :
