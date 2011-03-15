@@ -14,7 +14,7 @@
 *	Licensed Under the MIT/X-11 License 
 * 	www.rickotoole.com
 *
-* Version: 0.0.1i
+* Version: 0.0.2
 **/
 
 (function($) {
@@ -33,7 +33,7 @@
 				return height;
 			},
 			originalStyle : {}
-		}
+		};
 		var handlers = {
 			init : function (scrollStep,id) {
 				this.clicks(scrollStep,id);
@@ -76,7 +76,7 @@
 				var scrollDifference = (function (opt) {return opt.scrollDifference})(options);
 				$.fn.scrollbar.touch(id,scrollDifference);
 			}
-		}
+		};
 		var methods = {
 			create : function () {
 				return this.each(function(index) {
@@ -99,7 +99,7 @@
 						
 						// Use inline style on wrapper?
 						!options.scrollbar.inlineStyleForWrapper ? null : (options.originalStyle != undefined) ? new_c.attr("style",options.originalStyle) : null;
-						new_c.css({'position':'relative','overflow-y':'hidden','width':w,'height':h});
+						new_c.css({'position':'relative','overflow':'hidden','width':w,'height':h});
 
 						// Insert newly wrapped content and remove old content
 						new_c.append(scroll_slider).append(scrollContentWrapper);
@@ -113,9 +113,7 @@
 						// Save options and trigger completion event
 						new_c.data("scroll-options",options);
 						jQuery(this).trigger('scroll_drawn');
-					}
-					else 
-					{
+					} else {
 						c.data("scroll-options",options);
 					}
 				});
@@ -139,7 +137,7 @@
 					RemoveScrollbar(jQuery(this));
 				});
 			}
-		}
+		};
 	
 		/**
 		* Function CreateSlider
@@ -164,9 +162,9 @@
 				}
 			}).css({"width": options.scrollbar.width,"overflow": "visible","border": "0px"});
 			
-			scroll_wrap.append(scroll_slider)
+			scroll_wrap.append(scroll_slider);
 			return scroll_wrap;
-		}
+		};
 		
 		/**
 		* Function: WrapContent
@@ -185,7 +183,7 @@
 			
 			options.setContentHeight(s_content,current_content);
 			options.scrollDifference = options.contentHeight - options.wrapperHeight;
-			s_content.css({"height":options.contentHeight});
+			s_content.css({"height":options.contentHeight,'overflow-y':'hidden'});
 
 			var sc_wrap = jQuery('<div></div>').css({
 				"position"	: "relative",
@@ -199,7 +197,7 @@
 			sc_wrap.append(s_content);
 			
 			return sc_wrap;
-		}
+		};
 		
 		/**
 		* Function: RemoveScrollbar
@@ -213,7 +211,7 @@
 				c.html(original_content.html()).removeAttr("style").attr("style",options.originalStyle);
 				(c.attr("id").split("_")[0] = "scrollable") ? c.removeAttr("id") : null;
 			}
-		}
+		};
 		
 		/**
 		* Function: SliderToScrollbar
@@ -274,7 +272,7 @@
 						css({'position':'absolute','left':-w[1],'top':-h[1],'overflow':'hidden','width':'15px','max-height':"16px"}).addClass('ui-icon-carat-1-s'));
 				}
 			}
-		}
+		};
 		
 		
 		
@@ -282,7 +280,7 @@
 			var scrollbar_v = $("#" + id + " .scrollbar_outer > .ui-slider-vertical");
 			options.scrollbar.incrementSize = (options.scrollbar.incrementSize) ? options.scrollbar.incrementSize : parseInt(scrollbar_v.height()/20);
 			handlers.init(options.scrollbar.incrementSize,id);
-		}
+		};
 		
 		if (methods[method]) {
 			return methods[method].apply(this, Array.prototype.slice.call(arguments, 1));
@@ -319,7 +317,7 @@
 		var scroll_bar = $('#' + id + ' > .scrollbar_outer > .scrollbar');
 		var slider_val = scroll_bar.slider("value");
 		
-		step += .5*Math.abs(step)/step
+		step += .5*Math.abs(step)/step;
 		slider_val += step;
 		scroll_bar.slider("value", slider_val);
 		
@@ -391,7 +389,7 @@
 			}
 
 		}
-	}
+	};
 	$.fn.scrollbar.wheel.increment = function (id,scrollDifference,deltaY) {
 		var slider_value = $('#' + id).children(' .scrollbar_outer').children('.scrollbar').slider("value");
 		
@@ -408,9 +406,9 @@
 			current_direction === $.fn.scrollbar.wheel.increment.previous_direction ?	
 				$.fn.scrollbar.incrementSlider(step,id,scrollDifference) : $.fn.scrollbar.wheel.increment.previous_direction = current_direction ;
 			return false;
-		}
+		};
 		return true;
-	}
+	};
 	$.fn.scrollbar.wheel.increment.multiplier = (function() { if (jQuery.browser.msie == true) return 5; return 1;})();
 	$.fn.scrollbar.wheel.increment.previous_direction = 1;
 	
@@ -460,6 +458,6 @@
 			);
 			start_event.preventDefault();
 		});
-	}
+	};
 	
-})(jQuery);
+})(jQuery);	

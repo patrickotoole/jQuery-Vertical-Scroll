@@ -14,13 +14,27 @@
 
 <script>
 	$(document).ready( function () {
-		$(".slider").slider();
-		
+		$('div').css('float','left');
 		// BASE CASE -- specify increment size and width
-		$(".outer").scrollbar({incrementSize:3,width:10});
+		$(".outer").scrollbar({incrementSize:3,width:10,inlineStyleForWrapper:false});
 		
 		
 		// DEMO 1
+		
+		// Example of event trigger and result on styling
+		$(".toggle").button().live('click', function() {
+			var par = jQuery(this).parent();
+			var $par = jQuery(par);
+			if (par.attr("class")=="scroll_content")
+			{
+				jQuery(this).html("replace scrollbar").button();
+				par.parent().parent().scrollbar("destroy")
+			} else {
+				jQuery(this).html("remove scrollbar").button();
+				par.scrollbar()
+			}
+		});
+		
 		// Custom style using event trigger so styling can be replicated if scroll removed (window resize = good example)
 		$(".demo_1").live('scroll_drawn', function() {
 			$(".demo_1 .scroll_up").css('borderTopLeftRadius',5).html("");
@@ -28,21 +42,11 @@
 			$(".demo_1").css({'border': '1px solid #EEE','borderRadius':5})
 		}).scrollbar({end_cap_size:10});
 		
-		// Example of event trigger and result on styling
-		$(".demo_1 #toggle").live('click', function() {
-			if ($(".demo_1 .scroll_content_wrapper").length >0)
-			{
-				$(".demo_1").scrollbar("destroy");
-				$(".demo_1 #toggle").html("replace scrollbar");
-			} else {
-				$(".demo_1").scrollbar();
-				$(".demo_1 #toggle").html("remove scrollbar");
-			}
-		});
+
 		
 		// DEMO 2
 		// Demonstrates what happens without event trigger
-		$(".demo_2").scrollbar({width:36,location:"right",incrementSize:2,end_cap_size:20});
+		$(".demo_2").scrollbar({width:36,incrementSize:2,end_cap_size:20});
 		$(".demo_2 .scroll_up").css('borderTopLeftRadius',20).css('borderTopRightRadius',20);
 		$(".demo_2 .scroll_down").css({'borderBottomLeftRadius':20,'borderBottomRightRadius':20});
 		$(".demo_2 .ui-slider-handle").css({'borderRadius':'20px','background':'#949494','border-color':'#949494'});
@@ -69,16 +73,14 @@
 		// DEMO 3
 		// 
 		$(".demo_3").css({'border': '1px solid #EEE','borderRadius':5});
-		$(".demo_3").scrollbar({end_cap_size:0,incrementSize:2,inlineStyleForWrapper:false});
-		$(".demo_3").css({'display':'inline-block'});
+		$(".demo_3").scrollbar({end_cap_size:0,incrementSize:2,inlineStyleForWrapper:false,location:'right'});
+		$(".demo_3").css({'display':'inline-block','margin-left':'2px'});
 		$(".demo_3 .scroll_top").css({'borderTopLeftRadius':4,'borderTopRightRadius':4});
 		$(".demo_3 .scroll_bottom").css({'borderBottomRightRadius':4,'borderBottomLeftRadius':4})
 		
+		
 		$(".demo_4").scrollbar({width:15,location:"right"});
-		$(".demo_4 #overflow").live('click',function(){
-//			$(".demo_4 .scroll_content_wrapper").css({'overflow-y':'hidden','height':$(".demo_4 .scrollbar_outer").height()+"px"});
-			console.log($(".demo_4 .scrollbar_outer").height());
-		})
+
 		
 	});
 	
@@ -89,16 +91,25 @@
 </head>
 <body>
 <h1>UI Scroll Demo</h1>
-	<div style="width:100%">
-		<span style="text-decoration:line-through">World's ugliest newspaper</span>
-		Demo for scroll bars with nesting.
-		<div class="slider" style="width:600px"></div>
-		<hr /></div>
-<div class="outer" style="top:0em;width:1200px;height:500px;overflow-y:auto;display:block;position:relative;background-color:#FFFAF0;padding:5px">
+
+<div class="outer" style="top:0em;width:1200px;height:500px;overflow-y:auto;display:block;position:relative;background-color:#FFFAF0">
+	<div class="header" style="width:100%;display:inline-block">
+		<h2>About</h2>
+		Welcome to the <span style="text-decoration:line-through">World's ugliest newspaper</span>
+		demo for jQuery UI scroll bars with nesting and inline styling. There are 5 demonstrations occurring on the following classes: 
+		<ul>
+			<li>Outer - shows the basic scroll bar applied to a div of fixed height. (this header is included within the outer)</li>
+			<li>Demo 1 - shows scroll bar styled using inline properties and jquery after completion event is trigger.</li>
+			<li>Demo 2 - shows scroll bar styled using inline properties and jquery without using completion event</li>
+			<li>Demo 3 - shows styling without applying inline style to the wrapper</li>
+			<li>Demo 4 - shows case of inline style (with padding) applied to both the interior and wrapper</li>
+		</ul>
+		<hr />
+	</div>
 
 	<div class="text" style="width:200px;overflow-y:auto;display:inline-block">
-		<h2>Outer</h2>
-		Outer scrollbar initialized first, inner scrollbars initialized after to preserve jquery ui functionality. jQuery UI objects cannot be clone (easily). Since the scrollbar is based on them, must proceed from the outer and move inward with scrollbars.
+		<h2>Outer - Basic</h2>
+		Outer scrollbar is initialized first. Inner scrollbar initialization occurs after to preserve jQuery UI functionality. jQuery UI objects cannot be cloned (easily). Since the scrollbar is based on them, must proceed from the outer most div and move inward when applying scrollbars.
 		<hr />
 		<div>
 			Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc at sem est. Phasellus eget eros libero. Nullam tellus nibh, rutrum in porttitor quis, convallis non mauris. Suspendisse velit nisl, vestibulum at ultrices quis, consectetur eu nunc. Donec lacinia sem id tellus sollicitudin nec suscipit ipsum tincidunt. Nullam sit amet felis quis enim interdum tincidunt. Duis egestas, justo quis scelerisque interdum, diam arcu pulvinar ipsum, eu viverra dui sem sed tortor. Donec aliquam commodo bibendum. Quisque sit amet neque in ligula sagittis mollis. Vestibulum id leo at orci vestibulum rutrum et quis tortor.
@@ -107,37 +118,24 @@
 			Nunc volutpat, ligula vel vestibulum facilisis, sapien nibh mollis est, et mollis sapien ante a elit. Vivamus lacus risus, congue eu eleifend sed, faucibus sed ligula. Suspendisse egestas aliquet neque, non mattis orci vehicula ut. Mauris gravida malesuada dui sit amet convallis. Nulla eu ipsum sodales mi molestie posuere id vitae urna. Pellentesque velit velit, condimentum vel dignissim a, suscipit ut mauris. Praesent rutrum, diam ac interdum lacinia, dolor nisl iaculis odio, eu interdum felis erat bibendum dui. Cras varius adipiscing laoreet. Donec a purus sollicitudin lectus dapibus fringilla. Suspendisse dictum purus at nisl ullamcorper tempor. Proin malesuada nisi quis tellus mollis eget malesuada justo blandit. Donec in tortor turpis, ac sagittis ipsum. Pellentesque sit amet odio orci, at blandit augue.
 		</div>
 	</div>
-	<div class="demo_1" style="width:300px;height:400px;overflow-y:auto;display:inline-block;vertical-align:top;background-color:#fffafa;margin-top:40px">
-		<h2>Demo 1 -</h2>
-		<h3>styled using trigger "scroll_drawn"</h3>
-		<a href="#" id="toggle">remove scrollbar</a>
-		<br /><strong>without event trigger, would not be able to remove the arrows. everything else would be possible by simply making inline style into style sheet</strong>
-		<ul>
-			<li>note: margin taken from exterior</li>
-			<li>end_cap_size</li>
-			<li>radius</li>
-			<li>removed arrows with jquery .html()</li>
-		</ul>
-		<div>
-			Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc at sem est. Phasellus eget eros libero. Nullam tellus nibh, rutrum in porttitor quis, convallis non mauris. Suspendisse velit nisl, vestibulum at ultrices quis, consectetur eu nunc. Donec lacinia sem id tellus sollicitudin nec suscipit ipsum tincidunt. Nullam sit amet felis quis enim interdum tincidunt. Duis egestas, justo quis scelerisque interdum, diam arcu pulvinar ipsum, eu viverra dui sem sed tortor. Donec aliquam commodo bibendum. Quisque sit amet neque in ligula sagittis mollis. Vestibulum id leo at orci vestibulum rutrum et quis tortor.
-		</div>
-		<div>
-			Nunc volutpat, ligula vel vestibulum facilisis, sapien nibh mollis est, et mollis sapien ante a elit. Vivamus lacus risus, congue eu eleifend sed, faucibus sed ligula. Suspendisse egestas aliquet neque, non mattis orci vehicula ut. Mauris gravida malesuada dui sit amet convallis. Nulla eu ipsum sodales mi molestie posuere id vitae urna. Pellentesque velit velit, condimentum vel dignissim a, suscipit ut mauris. Praesent rutrum, diam ac interdum lacinia, dolor nisl iaculis odio, eu interdum felis erat bibendum dui. Cras varius adipiscing laoreet. Donec a purus sollicitudin lectus dapibus fringilla. Suspendisse dictum purus at nisl ullamcorper tempor. Proin malesuada nisi quis tellus mollis eget malesuada justo blandit. Donec in tortor turpis, ac sagittis ipsum. Pellentesque sit amet odio orci, at blandit augue.
-		</div>
-	</div>
 
-	<div class="demo_2" style="width:200px;height:600px;overflow-y:auto;display:inline-block;vertical-align:top;background-color:#fff5ee">
-		<h3>Demo 2</h3>
-		<h4>styled without trigger </h4>
-		<a href="#" id="toggle">remove scrollbar</a>
-		<br /><strong>note: scrollbar styling is not consistent with original</strong>
-		<ul>
-			<li>smaller increment</li>
-			<li>radius</li>
-			<li>width</li>
-			<li>color</li>
-			<li>right side</li>
-		</ul>
+	<div class="demo_1" style="width:700px;height:400px;overflow-y:auto;display:inline-block;vertical-align:top;background-color:#fffafa">
+		<h2>Demo 1 - Styling Options with Event Trigger</h2>
+		<h4>Four techniques associated with the scrollbar are demonstrated in this demo:
+		</h4>
+		<ol>
+			<li>Scrollbar options {end_cap_size : 10}</li>
+			<li>Using completion trigger to style </li>
+			<li>Removing scrollbars</li>
+			<li>Creating scrollbars</li>
+		</ol>
+		
+		<h4>When scrollbar is remove, options are saved. However, dynamic styling is lost unless styling occurs during completion trigger.
+		</h4>
+		<a href="#" class="toggle">remove scrollbar</a><br/>
+		<br />Without event trigger, this custom styling could occur with the exception of removing the html from the arrows. All other styling issue could be handled externally in a style sheet.
+		<h4>Note: both the wrapper and content inherit from the inline style. Demo 3 shows how this could be disabled.
+		</h4>
 		<div>
 			Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc at sem est. Phasellus eget eros libero. Nullam tellus nibh, rutrum in porttitor quis, convallis non mauris. Suspendisse velit nisl, vestibulum at ultrices quis, consectetur eu nunc. Donec lacinia sem id tellus sollicitudin nec suscipit ipsum tincidunt. Nullam sit amet felis quis enim interdum tincidunt. Duis egestas, justo quis scelerisque interdum, diam arcu pulvinar ipsum, eu viverra dui sem sed tortor. Donec aliquam commodo bibendum. Quisque sit amet neque in ligula sagittis mollis. Vestibulum id leo at orci vestibulum rutrum et quis tortor.
 		</div>
@@ -145,15 +143,35 @@
 			Nunc volutpat, ligula vel vestibulum facilisis, sapien nibh mollis est, et mollis sapien ante a elit. Vivamus lacus risus, congue eu eleifend sed, faucibus sed ligula. Suspendisse egestas aliquet neque, non mattis orci vehicula ut. Mauris gravida malesuada dui sit amet convallis. Nulla eu ipsum sodales mi molestie posuere id vitae urna. Pellentesque velit velit, condimentum vel dignissim a, suscipit ut mauris. Praesent rutrum, diam ac interdum lacinia, dolor nisl iaculis odio, eu interdum felis erat bibendum dui. Cras varius adipiscing laoreet. Donec a purus sollicitudin lectus dapibus fringilla. Suspendisse dictum purus at nisl ullamcorper tempor. Proin malesuada nisi quis tellus mollis eget malesuada justo blandit. Donec in tortor turpis, ac sagittis ipsum. Pellentesque sit amet odio orci, at blandit augue.
 		</div>
 	</div>
-	<div class="demo_3" style="width:200px;height:902px;overflow-y:auto;display:inline-block;vertical-align:top;background-color:yellow;padding:10px">
-		<h4>Demo 3</h4>
+	<div class="demo_2" style="width:600px;height:400px;overflow-y:auto;display:inline-block;vertical-align:top;background-color:#fff5ee;margin-top:20px">
+		<h2>Demo 2 - Styling Options without Event Trigger</h2>
+		<h4>Similar to Demo 1 but styling of scrollbars not related to event</h4>
+		<ol>
+			<li>Scrollbar options {width:36,incrementSize:2,end_cap_size:20}</li>
+			<li>Restyled slider (radius, color)</li>
+			<li>Added border to content area</li>
+			<li>Inline margin applied to both content and outer</li>
+		</ol>
+		<h4>When scrollbar is removed, options are saved but dynamic styling is not reapplied when scrollbar is redrawn.</h4>
+		<a href="#" class="toggle">remove scrollbar</a>
+		<div>
+			Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc at sem est. Phasellus eget eros libero. Nullam tellus nibh, rutrum in porttitor quis, convallis non mauris. Suspendisse velit nisl, vestibulum at ultrices quis, consectetur eu nunc. Donec lacinia sem id tellus sollicitudin nec suscipit ipsum tincidunt. Nullam sit amet felis quis enim interdum tincidunt. Duis egestas, justo quis scelerisque interdum, diam arcu pulvinar ipsum, eu viverra dui sem sed tortor. Donec aliquam commodo bibendum. Quisque sit amet neque in ligula sagittis mollis. Vestibulum id leo at orci vestibulum rutrum et quis tortor.
+		</div>
+		<div>
+			Nunc volutpat, ligula vel vestibulum facilisis, sapien nibh mollis est, et mollis sapien ante a elit. Vivamus lacus risus, congue eu eleifend sed, faucibus sed ligula. Suspendisse egestas aliquet neque, non mattis orci vehicula ut. Mauris gravida malesuada dui sit amet convallis. Nulla eu ipsum sodales mi molestie posuere id vitae urna. Pellentesque velit velit, condimentum vel dignissim a, suscipit ut mauris. Praesent rutrum, diam ac interdum lacinia, dolor nisl iaculis odio, eu interdum felis erat bibendum dui. Cras varius adipiscing laoreet. Donec a purus sollicitudin lectus dapibus fringilla. Suspendisse dictum purus at nisl ullamcorper tempor. Proin malesuada nisi quis tellus mollis eget malesuada justo blandit. Donec in tortor turpis, ac sagittis ipsum. Pellentesque sit amet odio orci, at blandit augue.
+		</div>
+	</div>
+	
+	<div class="demo_3" style="width:200px;height:800px;overflow-y:auto;display:inline-block;vertical-align:top;background-color:yellow;padding:10px">
+		<h3>Demo 3 - Content vs. Wrapper</h3>
 		<h5>inlineStyleForWrapper = false</h5>
+Scrollbar options {end_cap_size : 0, inlineStyleForWrapper:false, location:right}<p />
+		None of the inline style is applied to the wrapper, making the border shown in Demo 2 easier to implement. A list follows describing all that is occurring in this demo.
 		<ul>
 			<li>padding/bgcolor on interior but not exterior wrapper</li>
 			<li>added display:inline-block after drawn</li>
 			<li>no vertical align added but was on inline style</li>
-			<li>no endcaps</li>
-			<li>background radius</li>
+			<li>scrollbar background radius</li>
 			<li>width</li>
 		</ul>
 		<div>
@@ -163,10 +181,9 @@
 			Nunc volutpat, ligula vel vestibulum facilisis, sapien nibh mollis est, et mollis sapien ante a elit. Vivamus lacus risus, congue eu eleifend sed, faucibus sed ligula. Suspendisse egestas aliquet neque, non mattis orci vehicula ut. Mauris gravida malesuada dui sit amet convallis. Nulla eu ipsum sodales mi molestie posuere id vitae urna. Pellentesque velit velit, condimentum vel dignissim a, suscipit ut mauris. Praesent rutrum, diam ac interdum lacinia, dolor nisl iaculis odio, eu interdum felis erat bibendum dui. Cras varius adipiscing laoreet. Donec a purus sollicitudin lectus dapibus fringilla. Suspendisse dictum purus at nisl ullamcorper tempor. Proin malesuada nisi quis tellus mollis eget malesuada justo blandit. Donec in tortor turpis, ac sagittis ipsum. Pellentesque sit amet odio orci, at blandit augue.
 		</div>
 	</div>
-	<div class="demo_4" style="width:100px;height:202px;overflow-y:auto;display:inline-block;background:#CDCDCD;color:blue;padding:20px;vertical-align:top;">
-		<h3>Demo 4</h3>
-		<h5>preserved inline style</h5>
-		<a href="#" id="overflow">set interior overflow</a>
+	<div class="demo_4" style="width:600px;height:202px;overflow-y:auto;display:inline-block;background:#CDCDCD;color:blue;padding:20px;vertical-align:top;">
+		<h2>Demo 4 - Basic preserves inline style</h2>
+		<h4>Simple demo as counterpoint to Demo 3. Very similar to Outer but more is specified in inline style.</h4>
 		<ul>
 			<li>padding /bgcolor /color on wrapper</li>
 			<li>radius</li>
