@@ -33,7 +33,7 @@
 				jQuery(this).html("remove scrollbar").button();
 				par.scrollbar()
 			}
-		});
+		}).css({"display":"block","margin-left":'auto',"margin-right":"auto","width":"200px"});
 		
 		// Custom style using event trigger so styling can be replicated if scroll removed (window resize = good example)
 		$(".demo_1").live('scroll_drawn', function() {
